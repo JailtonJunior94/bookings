@@ -1,0 +1,25 @@
+version: "3"
+services: 
+  api:
+    container_name: booking-api
+    build: api/Dockerfile
+    image: booking-api
+    restart: always
+    environment:
+      - ENVIRONMENT=Staging
+      - TZ=America/Sao_Paulo
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    links: 
+      - mongodb
+
+  mongodb:
+    container_name: booking-db
+    image: mongo
+    restart: always
+    volumes:
+      - ./.docker/data:/data/db
+    ports:
+      - "27017:27017"
