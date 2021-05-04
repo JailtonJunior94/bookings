@@ -1,0 +1,28 @@
+@startuml desenho-arquitetura
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!include DEVICONS/go.puml
+!include DEVICONS/mongodb.puml
+
+left to right direction
+
+System_Boundary(fluxo, "Bookings") {
+    Container(api, "Booking API", "Golang", "API para criar usuários e reservas", "go")
+    Container(notifier, "Booking Notifier", "Golang", "Consumer para notificar cliente de reserva cadastrada", "go")
+
+    Container(rabbit, "reservation-notifier", "RabbitMQ", "Queue para processamento assincrono", "rabbitMQ")
+    ContainerDb(db, "Database", "Mongo DB", "Prover informações de usuários e reservas", "mongodb")
+    
+    Rel_L(api, db, "1º Criação e autenticação de usuários e listagem de reservas", "go.mongodb.org/mongo-driver")
+    Rel(api, rabbit, "2º Envia para queue a reserva criada", "amqp")
+    Rel_R(rabbit, notifier, "3º Recebe mensagem de reserva criada", "amqp")
+}
+
+System(telegram, "Telegram Bot API", "A Bot API é uma interface baseada em HTTP criada para desenvolvedores")
+Rel(notifier, telegram, "4º Envia notificação com dados das reservas", "http/json")
+
+@enduml
