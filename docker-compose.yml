@@ -1,8 +1,10 @@
-version: "3"
+version: "3.8"
 services: 
   api:
     container_name: booking-api
-    build: api/Dockerfile
+    build: 
+      context: .
+      dockerfile: api/Dockerfile
     image: booking-api
     restart: always
     environment:
@@ -12,8 +14,9 @@ services:
       - "5000:5000"
     depends_on:
       - mongodb
-    links: 
-      - mongodb
+      - rabbitmq
+    networks:
+      - booking_net
 
   mongodb:
     container_name: booking-db
@@ -23,3 +26,22 @@ services:
       - ./.docker/data:/data/db
     ports:
       - "27017:27017"
+    networks:
+      - booking_net
+
+  rabbitmq:
+    container_name: booking-rabbitmq
+    image: rabbitmq:3-management
+    restart: always
+    volumes: 
+      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./.docker/rabbitmq/log/:/var/log/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - booking_net
+
+networks:
+  booking_net:
+    driver: bridge
