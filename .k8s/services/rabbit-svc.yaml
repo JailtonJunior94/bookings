@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-service
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+    - name: messaging
+      port: 5672
+    - name: management
+      port: 15672
+  type: LoadBalancer

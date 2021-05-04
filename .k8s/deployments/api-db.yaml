@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: booking-api
+  name: booking-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booking-api
+  template:
+    metadata:
+      labels:
+        app: booking-api
+    spec:
+      containers:
+        - name: booking-api
+          image: jailtonjunior/booking-api:v3
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
+          env:
+            - name: ENVIRONMENT
+              value: Production
+          ports:
+            - containerPort: 5000

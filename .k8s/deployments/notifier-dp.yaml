@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: booking-notifier
+  name: booking-notifier-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booking-notifier
+  template:
+    metadata:
+      labels:
+        app: booking-notifier
+    spec:
+      containers:
+        - name: booking-notifier
+          image: jailtonjunior/booking-notifier:v3
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
+          env:
+            - name: ENVIRONMENT
+              value: Production
