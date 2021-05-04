@@ -11,6 +11,9 @@ import (
 var (
 	RabbitMQConnection = ""
 	RabbitMQQueue      = ""
+	TelegramBaseUrl    = ""
+	BotKey             = ""
+	ChatId             = int64(0)
 )
 
 func New() {
@@ -27,4 +30,7 @@ func New() {
 
 	RabbitMQConnection = viper.GetString("rabbitMQ.connection")
 	RabbitMQQueue = viper.GetString("rabbitMQ.queue")
+	TelegramBaseUrl = viper.GetString("telegram.baseURL")
+	BotKey = viper.GetString("telegram.botKey")
+	ChatId = viper.GetInt64("telegram.chatID")
 }

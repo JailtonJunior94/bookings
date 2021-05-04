@@ -7,5 +7,6 @@ import (
 )
 
 func AddBookingRouter(router fiber.Router) {
+	router.Get("/bookings", ioc.BookingController.Bookings)
 	router.Post("/bookings", ioc.BookingController.CreateBooking)
 }

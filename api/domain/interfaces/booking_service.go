@@ -6,6 +6,6 @@ import (
 )
 
 type IBookingService interface {
-	Bookings() *responses.HttpResponse
+	Bookings(userId string) *responses.HttpResponse
 	CreateBooking(userId string, request *requests.Booking) *responses.HttpResponse
 }

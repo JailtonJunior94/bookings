@@ -10,8 +10,8 @@ type Booking struct {
 }
 
 func (b *Booking) IsValid() error {
-	if b.Date == time.Now() {
-		return errors.New("O Nome é obrigatório")
+	if b.Date.IsZero() {
+		return errors.New("A Data é obrigatória")
 	}
 
 	return nil

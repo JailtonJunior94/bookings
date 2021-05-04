@@ -20,8 +20,13 @@ func NewBookingService(r interfaces.IBookingRepository, b interfaces.IRabbitMQ, 
 	return &BookingService{BookingRepository: r, RabbitMQ: b, UserRepository: u}
 }
 
-func (s *BookingService) Bookings() *responses.HttpResponse {
-	return nil
+func (s *BookingService) Bookings(userId string) *responses.HttpResponse {
+	bookings, err := s.BookingRepository.Get(userId)
+	if err != nil {
+		return responses.ServerError()
+	}
+
+	return responses.Ok(mappings.ToManyBookingResponse(bookings))
 }
 
 func (s *BookingService) CreateBooking(userId string, request *requests.Booking) *responses.HttpResponse {
@@ -36,7 +41,9 @@ func (s *BookingService) CreateBooking(userId string, request *requests.Booking)
 		return responses.ServerError()
 	}
 
-	body, err := json.Marshal(booking)
+	response := mappings.ToBookingResponse(booking)
+
+	body, err := json.Marshal(response)
 	if err != nil {
 		return responses.ServerError()
 	}
@@ -45,5 +52,5 @@ func (s *BookingService) CreateBooking(userId string, request *requests.Booking)
 		return responses.ServerError()
 	}
 
-	return responses.Created(mappings.ToBookingResponse(booking))
+	return responses.Created(response)
 }

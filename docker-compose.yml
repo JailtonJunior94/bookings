@@ -9,11 +9,24 @@ services:
     restart: always
     environment:
       - ENVIRONMENT=Staging
-      - TZ=America/Sao_Paulo
     ports:
       - "5000:5000"
     depends_on:
       - mongodb
+      - rabbitmq
+    networks:
+      - booking_net
+
+  notifier:
+    container_name: booking-notifier
+    build: 
+      context: .
+      dockerfile: notifier/Dockerfile
+    image: booking-notifier
+    restart: always
+    environment:
+      - ENVIRONMENT=Staging
+    depends_on:
       - rabbitmq
     networks:
       - booking_net
@@ -35,7 +48,7 @@ services:
     restart: always
     volumes: 
       - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
-      - ./.docker/rabbitmq/log/:/var/log/rabbitmq
+      - ./.docker/rabbitmq/log/:/var/log/rabbitmq/
     ports:
       - "5672:5672"
       - "15672:15672"

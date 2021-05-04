@@ -20,3 +20,20 @@ func ToBookingResponse(e *entities.Booking) (r *responses.BookingResponse) {
 		User: ToUserResponse(&e.User),
 	}
 }
+
+func ToManyBookingResponse(entities []entities.Booking) (r []responses.BookingResponse) {
+	if len(entities) == 0 {
+		return make([]responses.BookingResponse, 0)
+	}
+
+	for _, e := range entities {
+		item := responses.BookingResponse{
+			ID:   e.ID.Hex(),
+			Date: e.Date,
+			User: ToUserResponse(&e.User),
+		}
+		r = append(r, item)
+	}
+
+	return r
+}

@@ -35,3 +35,13 @@ func (u *BookingController) CreateBooking(c *fiber.Ctx) error {
 	response := u.Service.CreateBooking(*userId, request)
 	return c.Status(response.StatusCode).JSON(response.Data)
 }
+
+func (u *BookingController) Bookings(c *fiber.Ctx) error {
+	userId, err := u.Jwt.ExtractClaims(c.Get("Authorization"))
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Token inválido ou expirado"})
+	}
+
+	response := u.Service.Bookings(*userId)
+	return c.Status(response.StatusCode).JSON(response.Data)
+}
