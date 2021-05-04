@@ -6,6 +6,9 @@ import (
 	"os"
 
 	"github.com/jailtonjunior94/bookings/api/infrastructure/database"
+	"github.com/jailtonjunior94/bookings/api/infrastructure/environments"
+	"github.com/jailtonjunior94/bookings/api/infrastructure/ioc"
+	"github.com/jailtonjunior94/bookings/api/presentation/routes"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -18,14 +21,14 @@ func main() {
 	app.Use(cors.New())
 	app.Use(logger.New())
 
-	// environments.New()
+	environments.New()
 
 	mongoConnection := database.NewConnection()
 	defer mongoConnection.Disconnect()
 
-	// ioc.New(mongoConnection)
+	ioc.SetupDependencyInjection(mongoConnection)
 
-	// routes.RegisterRoutes(app)
+	routes.SetupRoutes(app)
 
 	port := os.Getenv("PORT")
 	fmt.Printf("🚀 API is running on http://localhost:%v", port)

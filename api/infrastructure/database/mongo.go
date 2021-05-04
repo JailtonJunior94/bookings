@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 
+	"github.com/jailtonjunior94/bookings/api/infrastructure/environments"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -19,7 +21,7 @@ type MongoConnection struct {
 }
 
 func NewConnection() IMongoConnection {
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(""))
+	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(environments.MongoConnectionString))
 	if err != nil {
 		log.Fatal(err)
 	}
