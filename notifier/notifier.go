@@ -14,7 +14,10 @@ func main() {
 	notification := handlers.NewNotificationHandler()
 
 	rabbitMQ := bus.New(infrastructure.RabbitMQConnection)
+
 	channel := rabbitMQ.GetChannel()
+	channel.Qos(0, 1, false)
+	channel.QueueDeclare(infrastructure.RabbitMQQueue, true, false, false, false, nil)
 	defer channel.Close()
 
 	messages, err := channel.Consume(infrastructure.RabbitMQQueue, "", true, false, false, false, nil)
