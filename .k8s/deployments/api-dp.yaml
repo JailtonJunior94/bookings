@@ -19,8 +19,10 @@ spec:
           image: jailtonjunior/booking-api:v3
           resources:
             limits:
-              cpu: "100m"
+              cpu: "200m"
               memory: "128Mi"
+            requests:
+              cpu: "100m"
           env:
             - name: ENVIRONMENT
               value: Production
